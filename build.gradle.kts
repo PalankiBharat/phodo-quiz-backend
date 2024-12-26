@@ -25,9 +25,9 @@ dependencies {
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
     implementation(libs.ktor.server.core)
-    implementation(libs.ktor.serialization.kotlinx.json)
+   // implementation(libs.ktor.serialization.kotlinx.json)
+    implementation("io.ktor:ktor-serialization-gson:3.0.2")
     implementation(libs.ktor.server.content.negotiation)
-    implementation(libs.mongodb.driver.core)
     implementation(libs.mongodb.driver.sync)
     implementation(libs.bson)
     implementation(libs.ktor.server.call.logging)
@@ -43,4 +43,6 @@ dependencies {
     implementation(libs.ktor.server.config.yaml)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+    implementation("org.mongodb:bson-kotlinx:5.2.1")
+
 }

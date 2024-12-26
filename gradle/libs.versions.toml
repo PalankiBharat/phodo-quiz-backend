@@ -5,16 +5,17 @@ kotlin-version = "2.1.0"
 ktor-version = "3.0.2"
 logback-version = "1.4.14"
 mongo-version = "4.10.2"
+mongo-coroutine = "5.2.1"
 
 [libraries]
 ktor-server-rate-limiting = { module = "io.github.flaxoos:ktor-server-rate-limiting", version = "2.1.1" }
 koin-ktor = { module = "io.insert-koin:koin-ktor", version.ref = "koin-version" }
 koin-logger-slf4j = { module = "io.insert-koin:koin-logger-slf4j", version.ref = "koin-version" }
-ktor-server-core = { module = "io.ktor:ktor-server-core-jvm", version.ref = "ktor-version" }
-ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json-jvm", version.ref = "ktor-version" }
-ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation-jvm", version.ref = "ktor-version" }
+ktor-server-core = { module = "io.ktor:ktor-server-core", version.ref = "ktor-version" }
+ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor-version" }
+ktor-server-content-negotiation = { module = "io.ktor:ktor-server-content-negotiation", version.ref = "ktor-version" }
 mongodb-driver-core = { module = "org.mongodb:mongodb-driver-core", version.ref = "mongo-version" }
-mongodb-driver-sync = { module = "org.mongodb:mongodb-driver-sync", version.ref = "mongo-version" }
+mongodb-driver-sync = { module = "org.mongodb:mongodb-driver-kotlin-coroutine", version.ref = "mongo-coroutine" }
 bson = { module = "org.mongodb:bson", version.ref = "mongo-version" }
 ktor-server-call-logging = { module = "io.ktor:ktor-server-call-logging-jvm", version.ref = "ktor-version" }
 ktor-server-swagger = { module = "io.ktor:ktor-server-swagger-jvm", version.ref = "ktor-version" }

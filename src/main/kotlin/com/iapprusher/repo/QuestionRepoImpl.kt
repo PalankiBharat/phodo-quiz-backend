@@ -1,0 +1,45 @@
+package com.iapprusher.repo
+
+import com.iapprusher.application.data.entity.Question
+import com.iapprusher.application.data.entity.Tag
+import com.mongodb.client.model.Filters
+import com.mongodb.kotlin.client.coroutine.MongoCollection
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.toList
+
+class QuestionRepoImpl (
+    private val mongoCollection: MongoCollection<Question>
+):QuestionRepo {
+    private val collection = mongoCollection.withDocumentClass(Question::class.java)
+    override suspend fun getAllQuestions(): List<Question> {
+        return collection
+            .find()
+            .toList()
+            .shuffled()
+    }
+
+    override suspend fun getQuestionsByTag(tag: Tag): List<Question> {
+        return collection.find(Filters.`in`(Question::tags.name, tag))
+            .toList()
+    }
+
+    override suspend fun getQuestionById(id: String): Question? {
+        return collection.find(Filters.`in`(Question::id.name, id)).firstOrNull()
+    }
+
+    override suspend fun addQuestion(question: Question): Boolean {
+        return collection.insertOne(question).wasAcknowledged()
+    }
+
+    override suspend fun addAllQuestions(questions: List<Question>): Boolean {
+        return collection.insertMany(questions).wasAcknowledged()
+    }
+
+    override suspend fun updateQuestion(id: String, question: Question): Question? {
+       return collection.findOneAndReplace(Filters.eq(Question::id.name, id), question)
+    }
+
+    override suspend fun deleteQuestion(id: String): Boolean {
+        return collection.deleteOne(Filters.eq(Question::id.name, id)).wasAcknowledged()
+    }
+}
