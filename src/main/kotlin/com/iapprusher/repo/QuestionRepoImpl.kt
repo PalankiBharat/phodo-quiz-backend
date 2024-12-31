@@ -23,6 +23,13 @@ class QuestionRepoImpl (
             .toList()
     }
 
+    override suspend fun getQuestionsPaginated(page: Int, size: Int): List<Question> {
+        return collection.find()
+            .skip((page - 1) * size)
+            .limit(size)
+            .toList()
+    }
+
     override suspend fun getQuestionById(id: String): Question? {
         return collection.find(Filters.`in`(Question::id.name, id)).firstOrNull()
     }

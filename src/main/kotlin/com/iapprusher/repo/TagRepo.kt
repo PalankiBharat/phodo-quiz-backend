@@ -1,0 +1,11 @@
+package com.iapprusher.repo
+
+import com.iapprusher.application.data.entity.Tag
+
+interface TagRepo {
+    suspend fun getAllTags(): List<Tag>
+    suspend fun addTag(tag: String): Boolean
+    suspend fun deleteTag(id: String): Boolean
+    suspend fun getTagById(id: String): Tag?
+    suspend fun updateTag(id: String, newTag: Tag): Tag?
+}

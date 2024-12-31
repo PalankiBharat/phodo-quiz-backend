@@ -2,7 +2,6 @@ package com.iapprusher.application.data.entity
 
 import com.iapprusher.application.data.response.QuestionResponse
 import com.iapprusher.application.utils.InstantAsBsonDateTime
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -22,8 +21,8 @@ data class Question(
         return QuestionResponse(
             id = id.toString(),
             question = question,
-            tags = tags.map { it.tag },
-            options = options.map { it.option },
+            tags = tags,
+            options = options,
             createdAt = createdAt.toString()
         )
     }
@@ -36,8 +35,3 @@ data class Option(
     val isCorrect: Boolean
 )
 
-data class Tag(
-    @SerialName("_id")
-    @BsonId val id: ObjectId?,
-    val tag: String
-)

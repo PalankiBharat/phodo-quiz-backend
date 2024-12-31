@@ -1,7 +1,7 @@
-
 plugins {
+    application
     alias(libs.plugins.kotlin.jvm)
-    alias(libs.plugins.ktor)
+    id("io.ktor.plugin") version "3.0.3"
     alias(libs.plugins.kotlin.plugin.serialization)
 }
 
@@ -9,10 +9,18 @@ group = "com.iapprusher"
 version = "0.0.1"
 
 application {
-    mainClass.set("io.ktor.server.netty.EngineMain")
-
+    mainClass.set("com.iapprusher.ApplicationKt")
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+}
+
+ktor {
+    fatJar {
+        archiveFileName.set("fat.jar")
+    }
+    docker {
+        jreVersion.set(JavaVersion.VERSION_17)
+    }
 }
 
 repositories {
@@ -25,7 +33,7 @@ dependencies {
     implementation(libs.koin.ktor)
     implementation(libs.koin.logger.slf4j)
     implementation(libs.ktor.server.core)
-   // implementation(libs.ktor.serialization.kotlinx.json)
+    // implementation(libs.ktor.serialization.kotlinx.json)
     implementation("io.ktor:ktor-serialization-gson:3.0.2")
     implementation(libs.ktor.server.content.negotiation)
     implementation(libs.mongodb.driver.sync)

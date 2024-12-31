@@ -20,7 +20,7 @@ class QuestionService(
          val questions =  repo.getAllQuestions().map {
              it.toQuestionResponse()
          }
-          if (questions.isNotEmpty()) {
+          if (questions.isEmpty()) {
               okResult(failureResponse("No questions found"))
           } else {
               okResult(successResponse("Questions found", questions))
