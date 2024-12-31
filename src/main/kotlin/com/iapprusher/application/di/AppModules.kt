@@ -7,6 +7,8 @@ import com.iapprusher.application.utils.StringConstants.QUESTIONS_COLLECTION_NAM
 import com.iapprusher.application.utils.StringConstants.TAG_COLLECTION_NAME
 import com.iapprusher.repo.QuestionRepo
 import com.iapprusher.repo.QuestionRepoImpl
+import com.iapprusher.repo.TagRepo
+import com.iapprusher.repo.TagRepoImpl
 import com.iapprusher.service.QuestionService
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Indexes
@@ -14,6 +16,7 @@ import com.mongodb.kotlin.client.coroutine.MongoCollection
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 
 import io.ktor.server.application.*
+import org.koin.core.qualifier.named
 import org.koin.dsl.bind
 import org.koin.dsl.module
 import org.koin.ktor.plugin.Koin
@@ -25,10 +28,11 @@ fun Application.configureDI() {
         modules(
             module {
                 single { connectToMongoDB() }
-                single { provideQuestionCollection(get()) }
-                single { provideTagsCollection(get()) }
-                single { QuestionRepoImpl(get()) } bind QuestionRepo::class
+                single(named("question")) { provideQuestionCollection(get()) }
+                single(named("tag")) { provideTagsCollection(get()) }
+                single { QuestionRepoImpl(get((named("question")))) } bind QuestionRepo::class
                 single { QuestionService(get()) }
+                single { TagRepoImpl(get(named("tag"))) } bind TagRepo::class
 
             }
         )

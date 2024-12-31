@@ -9,10 +9,12 @@ jwt:
   audience: "jwt-audience"
   realm: "ktor sample app"
 
-db.mongo.user: "Bharat"
-db.mongo.password: "aadAz0tJHRbFP7mo"
-db.mongo.host: "quizphodoindiacluster.hgcjv.mongodb.net"
-db.mongo.port: 27017
-db.mongo.maxPoolSize: 10
-db.mongo.database.name: "phodo_quiz-db"
+db:
+  mongo:
+    user: "Bharat"
+    password: "Bharat%402909"
+    host: "quizphodoindiacluster.hgcjv.mongodb.net/"
+    port: 27017
+    maxPoolSize: 10
+    database.name: "phodo_quiz-db"
 
