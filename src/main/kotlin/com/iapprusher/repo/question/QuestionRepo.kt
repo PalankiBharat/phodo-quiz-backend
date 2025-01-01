@@ -10,6 +10,6 @@ interface QuestionRepo {
     suspend fun addAllQuestions(questions: List<Question>): Boolean
     suspend fun updateQuestion(id: String, question: Question): Question?
     suspend fun deleteQuestion(id: String): Boolean
-    suspend fun getQuestionsByTag(tag: Tag): List<Question>
+    suspend fun getQuestionsByTag(tag: String): List<Question>
     suspend fun getQuestionsPaginated(page: Int, size: Int): List<Question>
 }

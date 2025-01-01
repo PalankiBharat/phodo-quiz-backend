@@ -71,4 +71,18 @@ class QuestionService(
             }
         }
     }
+
+    suspend fun getQuestionsByTag(tag: String):Pair<HttpStatusCode,BasicResponseModel<List<QuestionResponse>>>
+    {
+        return safeServerCall {
+            val questions = repo.getQuestionsByTag(tag).map {
+                it.toQuestionResponse()
+            }
+            if (questions.isEmpty()) {
+                okResult(failureResponse("No questions found"))
+            } else {
+                okResult(successResponse("Questions found", questions))
+            }
+        }
+    }
 }

@@ -10,9 +10,9 @@ import kotlinx.coroutines.flow.toList
 import org.bson.conversions.Bson
 import org.bson.types.ObjectId
 
-class QuestionRepoImpl (
+class QuestionRepoImpl(
     private val mongoCollection: MongoCollection<Question>
-): QuestionRepo {
+) : QuestionRepo {
     private val collection = mongoCollection.withDocumentClass(Question::class.java)
     override suspend fun getAllQuestions(): List<Question> {
         return collection
@@ -21,8 +21,9 @@ class QuestionRepoImpl (
             .shuffled()
     }
 
-    override suspend fun getQuestionsByTag(tag: Tag): List<Question> {
-        return collection.find(Filters.`in`(Question::tags.name, tag))
+    override suspend fun getQuestionsByTag(tag: String): List<Question> {
+        val internalTagFilter = Filters.eq(Tag::tag.name, tag)
+        return collection.find(Filters.elemMatch(Question::tags.name, internalTagFilter))
             .toList()
     }
 
@@ -46,7 +47,7 @@ class QuestionRepoImpl (
     }
 
     override suspend fun updateQuestion(id: String, question: Question): Question? {
-       return collection.findOneAndReplace(Filters.eq(ID, ObjectId(id)), question)
+        return collection.findOneAndReplace(Filters.eq(ID, ObjectId(id)), question)
     }
 
     override suspend fun deleteQuestion(id: String): Boolean {
