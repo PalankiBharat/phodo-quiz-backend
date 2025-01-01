@@ -5,16 +5,10 @@ object Routes {
     object Question {
         const val ROUTE = "question"
         const val ID = "id"
-        const val LIKE = "like"
     }
-    object User{
-        const val ROUTE = "user"
-        const val USER_ID = "user_id"
-    }
-
-    object Comment{
-        const val ROUTE = "comment"
-        const val COMMENT_ID = "comment_id"
+    object Tag{
+        const val ROUTE = "tag"
+        const val ID = "id"
     }
 
     const val PAGE = "Page"

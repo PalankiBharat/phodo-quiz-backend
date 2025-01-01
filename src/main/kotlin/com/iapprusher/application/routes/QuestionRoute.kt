@@ -29,6 +29,7 @@ fun Route.questionRoute() {
                 val editQuestionRequest = call.receive<QuestionRequest>()
                 val questionId = call.parameters[Routes.Question.ID]
                     ?: return@post call.respond(HttpStatusCode.BadRequest)
+                println("Question ID: $questionId")
                 val editResponse = questionsService.updateQuestion(questionId, editQuestionRequest)
                 call.sendResponse(editResponse)
             }

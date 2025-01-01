@@ -1,4 +1,4 @@
-package com.iapprusher.repo
+package com.iapprusher.repo.tags
 
 import com.iapprusher.application.data.entity.Tag
 

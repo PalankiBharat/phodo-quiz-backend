@@ -1,6 +1,7 @@
-package com.iapprusher.repo
+package com.iapprusher.repo.tags
 
 import com.iapprusher.application.data.entity.Tag
+import com.iapprusher.application.utils.StringConstants.ID
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Indexes
@@ -24,15 +25,15 @@ class TagRepoImpl(
     }
 
     override suspend fun deleteTag(id: String): Boolean {
-        return collection.deleteOne(Filters.eq(Tag::id.name, id)).wasAcknowledged()
+        return collection.deleteOne(Filters.eq(ID, id)).wasAcknowledged()
     }
 
     override suspend fun getTagById(id: String): Tag? {
-        return collection.find(Filters.eq(Tag::id.name, id)).firstOrNull()
+        return collection.find(Filters.eq(ID, id)).firstOrNull()
     }
 
     override suspend fun updateTag(id: String, newTag: Tag): Tag? {
-        return collection.findOneAndReplace(Filters.eq(Tag::id.name, id), newTag)
+        return collection.findOneAndReplace(Filters.eq(ID, id), newTag)
     }
 
 }

@@ -7,14 +7,14 @@ import kotlinx.datetime.Clock
 
 data class QuestionRequest(
     val question: String,
-    val tags: List<Tag>,
+    val tags: List<TagRequest>,
     val options: List<Option>
 ){
     fun toQuestion(): Question {
         return Question(
             id = null,
             question = question,
-            tags = tags,
+            tags = tags.map { it.toTag() },
             options = options,
             createdAt = Clock.System.now()
         )

@@ -7,10 +7,8 @@ import com.iapprusher.application.data.response.QuestionResponse
 import com.iapprusher.application.data.response.failureResponse
 import com.iapprusher.application.data.response.successResponse
 import com.iapprusher.application.utils.safeServerCall
-import com.iapprusher.repo.QuestionRepo
+import com.iapprusher.repo.question.QuestionRepo
 import io.ktor.http.*
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.inject
 
 class QuestionService(
     private val repo: QuestionRepo

@@ -5,13 +5,12 @@ import com.iapprusher.application.data.entity.Tag
 import com.iapprusher.application.plugins.connectToMongoDB
 import com.iapprusher.application.utils.StringConstants.QUESTIONS_COLLECTION_NAME
 import com.iapprusher.application.utils.StringConstants.TAG_COLLECTION_NAME
-import com.iapprusher.repo.QuestionRepo
-import com.iapprusher.repo.QuestionRepoImpl
-import com.iapprusher.repo.TagRepo
-import com.iapprusher.repo.TagRepoImpl
+import com.iapprusher.repo.question.QuestionRepo
+import com.iapprusher.repo.question.QuestionRepoImpl
+import com.iapprusher.repo.tags.TagRepo
+import com.iapprusher.repo.tags.TagRepoImpl
 import com.iapprusher.service.QuestionService
-import com.mongodb.client.model.IndexOptions
-import com.mongodb.client.model.Indexes
+import com.iapprusher.service.TagService
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
 
@@ -33,7 +32,7 @@ fun Application.configureDI() {
                 single { QuestionRepoImpl(get((named("question")))) } bind QuestionRepo::class
                 single { QuestionService(get()) }
                 single { TagRepoImpl(get(named("tag"))) } bind TagRepo::class
-
+                single { TagService(get()) }
             }
         )
     }

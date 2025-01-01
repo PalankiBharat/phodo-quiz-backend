@@ -1,4 +1,4 @@
-package com.iapprusher.repo
+package com.iapprusher.repo.question
 
 import com.iapprusher.application.data.entity.Question
 import com.iapprusher.application.data.entity.Tag
