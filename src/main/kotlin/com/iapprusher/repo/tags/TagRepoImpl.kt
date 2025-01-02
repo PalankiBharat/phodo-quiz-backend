@@ -36,9 +36,7 @@ class TagRepoImpl(
 
     override suspend fun updateTag(id: String, newTag: Tag): Boolean {
         val update = Updates.set(Tag::tag.name, newTag.tag)
-        val tag = collection.updateOne(Filters.eq(ID, ObjectId(id)), update)
-        println("TagRepoImpl.updateTag: ${tag.modifiedCount}")
-        return tag.wasAcknowledged()
+        return collection.updateOne(Filters.eq(ID, ObjectId(id)), update).wasAcknowledged()
     }
 
 }
