@@ -9,6 +9,6 @@ suspend inline fun <reified T> safeServerCall(serverCall: suspend () -> Pair<Htt
         serverCall()
     } catch (e: Exception) {
         println("Exception" + e.localizedMessage)
-        internalServerErrorResult()
+        internalServerErrorResult(e)
     }
 }

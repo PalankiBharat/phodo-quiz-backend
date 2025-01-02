@@ -2,7 +2,9 @@ package com.iapprusher.service
 
 import com.iapprusher.application.data.entity.Tag
 import com.iapprusher.application.data.request.EditTagRequest
+import com.iapprusher.application.data.request.TagRequest
 import com.iapprusher.application.data.response.BasicResponseModel
+import com.iapprusher.application.data.response.TagResponse
 import com.iapprusher.application.data.response.failureResponse
 import com.iapprusher.application.data.response.successResponse
 import com.iapprusher.application.utils.okResult
@@ -46,11 +48,11 @@ class TagService(
         }
     }
 
-    suspend fun editTag(editTagRequest: EditTagRequest): Pair<HttpStatusCode, BasicResponseModel<Tag>> {
+    suspend fun editTag(editTagRequest: EditTagRequest): Pair<HttpStatusCode, BasicResponseModel<TagResponse>> {
         return safeServerCall {
             val result = tagRepository.updateTag(editTagRequest.id, editTagRequest.toTag())
             if (result != null) {
-                okResult(successResponse("Tag edited", result))
+                okResult(successResponse("Tag edited", result.toTagResponse()))
             } else {
                 okResult(failureResponse("Tag not edited"))
             }
