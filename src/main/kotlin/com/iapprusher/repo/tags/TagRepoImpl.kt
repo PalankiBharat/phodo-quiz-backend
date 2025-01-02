@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.toList
 import org.bson.types.ObjectId
 
 class TagRepoImpl(
-    private val mongoCollection: MongoCollection<Tag>
+    mongoCollection: MongoCollection<Tag>
 ) : TagRepo {
     private val collection = mongoCollection.withDocumentClass(Tag::class.java)
     override suspend fun getAllTags(): List<Tag> {
