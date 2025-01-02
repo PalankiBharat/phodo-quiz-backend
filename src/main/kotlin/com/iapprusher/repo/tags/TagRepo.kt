@@ -7,5 +7,5 @@ interface TagRepo {
     suspend fun addTag(tag: String): Boolean
     suspend fun deleteTag(id: String): Boolean
     suspend fun getTagById(id: String): Tag?
-    suspend fun updateTag(id: String, newTag: Tag): Tag?
+    suspend fun updateTag(id: String, newTag: Tag): Boolean
 }

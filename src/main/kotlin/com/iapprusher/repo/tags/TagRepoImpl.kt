@@ -5,9 +5,11 @@ import com.iapprusher.application.utils.StringConstants.ID
 import com.mongodb.client.model.Filters
 import com.mongodb.client.model.IndexOptions
 import com.mongodb.client.model.Indexes
+import com.mongodb.client.model.Updates
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
+import org.bson.types.ObjectId
 
 class TagRepoImpl(
     private val mongoCollection: MongoCollection<Tag>
@@ -25,15 +27,18 @@ class TagRepoImpl(
     }
 
     override suspend fun deleteTag(id: String): Boolean {
-        return collection.deleteOne(Filters.eq(ID, id)).wasAcknowledged()
+        return collection.deleteOne(Filters.eq(ID, ObjectId(id))).wasAcknowledged()
     }
 
     override suspend fun getTagById(id: String): Tag? {
-        return collection.find(Filters.eq(ID, id)).firstOrNull()
+        return collection.find(Filters.eq(ID, ObjectId(id))).firstOrNull()
     }
 
-    override suspend fun updateTag(id: String, newTag: Tag): Tag? {
-        return collection.findOneAndReplace(Filters.eq(ID, id), newTag)
+    override suspend fun updateTag(id: String, newTag: Tag): Boolean {
+        val update = Updates.set(Tag::tag.name, newTag.tag)
+        val tag = collection.updateOne(Filters.eq(ID, ObjectId(id)), update)
+        println("TagRepoImpl.updateTag: ${tag.modifiedCount}")
+        return tag.wasAcknowledged()
     }
 
 }

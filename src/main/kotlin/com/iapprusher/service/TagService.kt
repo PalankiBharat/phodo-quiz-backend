@@ -15,9 +15,9 @@ import io.ktor.http.*
 class TagService(
     private val tagRepository: TagRepo
 ) {
-    suspend fun getTags(): Pair<HttpStatusCode, BasicResponseModel<List<Tag>>> {
+    suspend fun getTags(): Pair<HttpStatusCode, BasicResponseModel<List<TagResponse>>> {
         return safeServerCall {
-            val tags = tagRepository.getAllTags()
+            val tags = tagRepository.getAllTags().map { it.toTagResponse() }
             if (tags.isEmpty()) {
                 okResult(failureResponse("No tags found"))
             } else {
@@ -48,11 +48,11 @@ class TagService(
         }
     }
 
-    suspend fun editTag(editTagRequest: EditTagRequest): Pair<HttpStatusCode, BasicResponseModel<TagResponse>> {
+    suspend fun editTag(editTagRequest: EditTagRequest): Pair<HttpStatusCode, BasicResponseModel<Boolean>> {
         return safeServerCall {
             val result = tagRepository.updateTag(editTagRequest.id, editTagRequest.toTag())
-            if (result != null) {
-                okResult(successResponse("Tag edited", result.toTagResponse()))
+            if (result) {
+                okResult(successResponse("Tag edited", true))
             } else {
                 okResult(failureResponse("Tag not edited"))
             }
