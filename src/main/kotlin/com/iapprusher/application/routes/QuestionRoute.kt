@@ -45,10 +45,12 @@ fun Route.questionRoute() {
                 call.sendResponse(questionsResponse)
             }
 
-            get("/tag/{${Routes.Tag.ROUTE}}") {
+            get("/${Routes.Tag.ROUTE}") {
                 val tag = call.parameters[Routes.Tag.ROUTE]
                     ?: return@get call.respond(HttpStatusCode.BadRequest)
-                val questionsResponse = questionsService.getQuestionsByTag(tag)
+                val size = call.parameters["size"]?.toInt()
+
+                val questionsResponse = questionsService.getQuestionsByTag(tag, size)
                 call.sendResponse(questionsResponse)
             }
 
