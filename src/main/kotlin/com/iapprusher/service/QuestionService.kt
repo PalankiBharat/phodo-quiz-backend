@@ -8,26 +8,32 @@ import com.iapprusher.application.data.response.failureResponse
 import com.iapprusher.application.data.response.successResponse
 import com.iapprusher.application.utils.safeServerCall
 import com.iapprusher.repo.question.QuestionRepo
+import com.iapprusher.repo.tags.TagRepo
 import io.ktor.http.*
 
 class QuestionService(
-    private val repo: QuestionRepo
+    private val repo: QuestionRepo,
+    private val tagRepo: TagRepo
 ) {
-    suspend fun getAllQuestions():Pair<HttpStatusCode,BasicResponseModel<List<QuestionResponse>>>  {
-      return  safeServerCall {
-         val questions =  repo.getAllQuestions().map {
-             it.toQuestionResponse()
-         }
-          if (questions.isEmpty()) {
-              okResult(failureResponse("No questions found"))
-          } else {
-              okResult(successResponse("Questions found", questions))
-          }
+    suspend fun getAllQuestions(): Pair<HttpStatusCode, BasicResponseModel<List<QuestionResponse>>> {
+        return safeServerCall {
+            val questions = repo.getAllQuestions().map {
+                it.toQuestionResponse()
+            }
+            if (questions.isEmpty()) {
+                okResult(failureResponse("No questions found"))
+            } else {
+                okResult(successResponse("Questions found", questions))
+            }
         }
     }
 
-    suspend fun addQuestion(question: QuestionRequest):Pair<HttpStatusCode,BasicResponseModel<Boolean>> {
+    suspend fun addQuestion(question: QuestionRequest): Pair<HttpStatusCode, BasicResponseModel<Boolean>> {
         return safeServerCall {
+            val areTagsPresent = tagRepo.areTagsPresent(question.tags.map { it.tag })
+            if (!areTagsPresent) {
+                return@safeServerCall okResult(failureResponse("All Tags Do Not Exist"))
+            }
             val questionEntity = question.toQuestion()
             val result = repo.addQuestion(questionEntity)
             if (result) {
@@ -38,7 +44,7 @@ class QuestionService(
         }
     }
 
-    suspend fun getQuestionById(id: String):Pair<HttpStatusCode,BasicResponseModel<QuestionResponse>> {
+    suspend fun getQuestionById(id: String): Pair<HttpStatusCode, BasicResponseModel<QuestionResponse>> {
         return safeServerCall {
             val question = repo.getQuestionById(id)
             if (question != null) {
@@ -49,8 +55,15 @@ class QuestionService(
         }
     }
 
-    suspend fun updateQuestion(id: String, question: QuestionRequest):Pair<HttpStatusCode,BasicResponseModel<QuestionResponse>> {
+    suspend fun updateQuestion(
+        id: String,
+        question: QuestionRequest
+    ): Pair<HttpStatusCode, BasicResponseModel<QuestionResponse>> {
         return safeServerCall {
+            val areTagsPresent = tagRepo.areTagsPresent(question.tags.map { it.tag })
+            if (!areTagsPresent) {
+                return@safeServerCall okResult(failureResponse("All Tags Do Not Exist"))
+            }
             val questionEntity = question.toQuestion()
             val updatedQuestion = repo.updateQuestion(id, questionEntity)
             if (updatedQuestion != null) {
@@ -61,7 +74,7 @@ class QuestionService(
         }
     }
 
-    suspend fun deleteQuestion(id: String):Pair<HttpStatusCode,BasicResponseModel<Boolean>> {
+    suspend fun deleteQuestion(id: String): Pair<HttpStatusCode, BasicResponseModel<Boolean>> {
         return safeServerCall {
             val result = repo.deleteQuestion(id)
             if (result) {
@@ -72,10 +85,9 @@ class QuestionService(
         }
     }
 
-    suspend fun getQuestionsByTag(tag: String):Pair<HttpStatusCode,BasicResponseModel<List<QuestionResponse>>>
-    {
+    suspend fun getQuestionsByTag(tag: String, size:Int?): Pair<HttpStatusCode, BasicResponseModel<List<QuestionResponse>>> {
         return safeServerCall {
-            val questions = repo.getQuestionsByTag(tag).map {
+            val questions = repo.getQuestionsByTag(tag, size).map {
                 it.toQuestionResponse()
             }
             if (questions.isEmpty()) {

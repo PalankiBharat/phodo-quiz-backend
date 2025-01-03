@@ -8,4 +8,5 @@ interface TagRepo {
     suspend fun deleteTag(id: String): Boolean
     suspend fun getTagById(id: String): Tag?
     suspend fun updateTag(id: String, newTag: Tag): Boolean
+    suspend fun areTagsPresent(tags: List<String>): Boolean
 }

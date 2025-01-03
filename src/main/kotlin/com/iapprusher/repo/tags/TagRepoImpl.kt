@@ -2,10 +2,7 @@ package com.iapprusher.repo.tags
 
 import com.iapprusher.application.data.entity.Tag
 import com.iapprusher.application.utils.StringConstants.ID
-import com.mongodb.client.model.Filters
-import com.mongodb.client.model.IndexOptions
-import com.mongodb.client.model.Indexes
-import com.mongodb.client.model.Updates
+import com.mongodb.client.model.*
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
@@ -37,6 +34,10 @@ class TagRepoImpl(
     override suspend fun updateTag(id: String, newTag: Tag): Boolean {
         val update = Updates.set(Tag::tag.name, newTag.tag)
         return collection.updateOne(Filters.eq(ID, ObjectId(id)), update).wasAcknowledged()
+    }
+
+    override suspend fun areTagsPresent(tags: List<String>): Boolean {
+        return collection.countDocuments(Filters.`in`(Tag::tag.name, tags)) == tags.size.toLong()
     }
 
 }

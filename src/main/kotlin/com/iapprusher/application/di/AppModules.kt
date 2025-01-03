@@ -13,7 +13,6 @@ import com.iapprusher.service.QuestionService
 import com.iapprusher.service.TagService
 import com.mongodb.kotlin.client.coroutine.MongoCollection
 import com.mongodb.kotlin.client.coroutine.MongoDatabase
-
 import io.ktor.server.application.*
 import org.koin.core.qualifier.named
 import org.koin.dsl.bind
@@ -30,25 +29,12 @@ fun Application.configureDI() {
                 single(named("question")) { provideQuestionCollection(get()) }
                 single(named("tag")) { provideTagsCollection(get()) }
                 single { QuestionRepoImpl(get((named("question")))) } bind QuestionRepo::class
-                single { QuestionService(get()) }
+                single { QuestionService(get(), get()) }
                 single { TagRepoImpl(get(named("tag"))) } bind TagRepo::class
                 single { TagService(get()) }
             }
         )
     }
-}
-
-private val repositoryModule = module {
-    single { QuestionRepoImpl(get()) } bind QuestionRepo::class
-}
-
-private val collectionModule = module {
-    single { provideQuestionCollection(get()) }
-}
-
-private val serviceModule = module {
-    single { QuestionService(get()) }
-
 }
 
 fun provideQuestionCollection(database: MongoDatabase): MongoCollection<Question> {
