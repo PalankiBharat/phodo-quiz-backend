@@ -2,6 +2,8 @@ package com.iapprusher.application.routes
 
 import com.iapprusher.application.data.request.QuestionRequest
 import com.iapprusher.application.utils.Routes
+import com.iapprusher.application.utils.Routes.PAGE
+import com.iapprusher.application.utils.Routes.SIZE
 import com.iapprusher.application.utils.sendResponse
 import com.iapprusher.service.QuestionService
 import io.ktor.http.*
@@ -15,7 +17,7 @@ fun Route.questionRoute() {
     route(Routes.API_VERSION) {
         route(Routes.Question.ROUTE) {
             addQuestion(questionsService)
-            deleteQuestion(questionsService) 
+            deleteQuestion(questionsService)
             updateQuestion(questionsService)
             getQuestionById(questionsService)
             getPaginatedQuestions(questionsService)
@@ -28,7 +30,7 @@ fun Route.questionRoute() {
 /**
  * POST /api/v1/questions
  * Creates a new question in the system.
- * 
+ *
  * @request body QuestionRequest - The question details including title, content, and tags
  */
 private fun Route.addQuestion(questionsService: QuestionService) {
@@ -42,7 +44,7 @@ private fun Route.addQuestion(questionsService: QuestionService) {
 /**
  * DELETE /api/v1/questions/{id}
  * Deletes a specific question by its ID.
- * 
+ *
  * @param id The unique identifier of the question to delete
  */
 private fun Route.deleteQuestion(questionsService: QuestionService) {
@@ -57,7 +59,7 @@ private fun Route.deleteQuestion(questionsService: QuestionService) {
 /**
  * POST /api/v1/questions/{id}
  * Updates an existing question by its ID.
- * 
+ *
  * @param id The unique identifier of the question to update
  * @request body QuestionRequest - The updated question details
  */
@@ -75,7 +77,7 @@ private fun Route.updateQuestion(questionsService: QuestionService) {
 /**
  * GET /api/v1/questions/{id}
  * Retrieves a specific question by its ID.
- * 
+ *
  * @param id The unique identifier of the question to retrieve
  */
 private fun Route.getQuestionById(questionsService: QuestionService) {
@@ -90,14 +92,14 @@ private fun Route.getQuestionById(questionsService: QuestionService) {
 /**
  * GET /api/v1/questions?page={page}&size={size}
  * Retrieves a paginated list of all questions.
- * 
+ *
  * @param page Optional: The page number (defaults to 1)
  * @param size Optional: Number of items per page (defaults to 10)
  */
 private fun Route.getPaginatedQuestions(questionsService: QuestionService) {
     get {
-        val page = call.parameters["page"]?.toIntOrNull() ?: 1
-        val size = call.parameters["size"]?.toIntOrNull() ?: 10
+        val page = call.parameters[PAGE]?.toIntOrNull() ?: 1
+        val size = call.parameters[SIZE]?.toIntOrNull() ?: 10
         val questionsResponse = questionsService.getQuestionsPaginated(page, size)
         call.sendResponse(questionsResponse)
     }
@@ -106,7 +108,7 @@ private fun Route.getPaginatedQuestions(questionsService: QuestionService) {
 /**
  * GET /api/v1/questions/tags?tag={tag}&page={page}&size={size}
  * Retrieves a paginated list of questions filtered by a specific tag.
- * 
+ *
  * @param tag Required: The tag to filter questions by
  * @param page Optional: The page number (defaults to 1)
  * @param size Optional: Number of items per page (defaults to 10)
@@ -115,8 +117,8 @@ private fun Route.getQuestionsByTagPaginated(questionsService: QuestionService) 
     get("/${Routes.Tag.ROUTE}") {
         val tag = call.parameters[Routes.Tag.ROUTE]
             ?: return@get call.respond(HttpStatusCode.BadRequest)
-        val page = call.parameters["page"]?.toIntOrNull() ?: 1
-        val size = call.parameters["size"]?.toIntOrNull() ?: 10
+        val page = call.parameters[PAGE]?.toIntOrNull() ?: 1
+        val size = call.parameters[SIZE]?.toIntOrNull() ?: 10
         val questionsResponse = questionsService.getQuestionsByTagPaginated(tag, page, size)
         call.sendResponse(questionsResponse)
     }
@@ -125,7 +127,7 @@ private fun Route.getQuestionsByTagPaginated(questionsService: QuestionService) 
 /**
  * GET /api/v1/questions/tags/random?tag={tag}&size={size}
  * Retrieves a random set of questions for a specific tag.
- * 
+ *
  * @param tag Required: The tag to filter questions by
  * @param size Optional: Number of random questions to return (defaults to 10)
  */
@@ -133,7 +135,7 @@ private fun Route.getRandomQuestionsByTag(questionsService: QuestionService) {
     get("/${Routes.Tag.ROUTE}/random") {
         val tag = call.parameters[Routes.Tag.ROUTE]
             ?: return@get call.respond(HttpStatusCode.BadRequest)
-        val size = call.parameters["size"]?.toIntOrNull() ?: 10
+        val size = call.parameters[SIZE]?.toIntOrNull() ?: 10
         val questionsResponse = questionsService.getRandomQuestionsByTag(tag, size)
         call.sendResponse(questionsResponse)
     }

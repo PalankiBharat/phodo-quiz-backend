@@ -11,7 +11,7 @@ object Routes {
         const val ID = "id"
     }
 
-    const val PAGE = "Page"
-    const val LIMIT = "Limit"
+    const val PAGE = "page"
+    const val SIZE = "size"
 
 }
