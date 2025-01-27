@@ -1,5 +1,6 @@
 package com.iapprusher
 
+import com.iapprusher.application.data.copyclasses.readJsonFileExample
 import com.iapprusher.application.di.configureDI
 import com.iapprusher.application.plugins.configureMonitoring
 import com.iapprusher.application.plugins.configureRouting

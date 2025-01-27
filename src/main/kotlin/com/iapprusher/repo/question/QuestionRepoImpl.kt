@@ -6,9 +6,9 @@ import com.iapprusher.application.utils.StringConstants.ID
 import com.mongodb.client.model.Aggregates
 import com.mongodb.client.model.Filters
 import com.mongodb.kotlin.client.coroutine.MongoCollection
+import com.iapprusher.application.data.response.PaginationMetadata
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.toList
-import org.bson.conversions.Bson
 import org.bson.types.ObjectId
 
 class QuestionRepoImpl(
@@ -22,25 +22,62 @@ class QuestionRepoImpl(
             .shuffled()
     }
 
-    override suspend fun getQuestionsByTag(tag: String, size: Int?): List<Question> {
+    override suspend fun getQuestionsByTagPaginated(tag: String, page: Int, size: Int): Pair<List<Question>, PaginationMetadata> {
         val internalTagFilter = Filters.eq(Tag::tag.name, tag)
         val filter = Filters.elemMatch(Question::tags.name, internalTagFilter)
-        val aggregates = mutableListOf(
-            Aggregates.match(filter)
-        )
-        if (size != null) {
-            aggregates.add(Aggregates.sample(size))
+        
+        val totalRecords = collection.countDocuments(filter)
+        val totalPages = ((totalRecords + size - 1) / size).toInt()
+        val skipCount = (page - 1) * size
+        
+        val questions = if (skipCount >= totalRecords) {
+            emptyList()
+        } else {
+            collection.find(filter)
+                .skip(skipCount)
+                .limit(size)
+                .toList()
         }
-        return collection.aggregate(
-            aggregates
-        ).toList()
+
+        val metadata = PaginationMetadata(
+            totalRecords = totalRecords.toInt(),
+            currentPage = page,
+            totalPages = totalPages,
+            nextPage = if (page < totalPages) page + 1 else null,
+            prevPage = if (page > 1) page - 1 else null
+        )
+
+        return Pair(questions, metadata)
     }
 
-    override suspend fun getQuestionsPaginated(page: Int, size: Int): List<Question> {
-        return collection.find()
-            .skip((page - 1) * size)
-            .limit(size)
-            .toList()
+
+    override suspend fun getQuestionsPaginated(page: Int, size: Int): Pair<List<Question>, PaginationMetadata> {
+        val totalRecords = getTotalQuestions()
+        val totalPages = ((totalRecords + size - 1) / size).toInt()
+        val skipCount = (page - 1) * size
+        
+        val questions = if (skipCount >= totalRecords) {
+            emptyList()
+        } else {
+            collection.find()
+                .skip(skipCount)
+                .limit(size)
+                .toList()
+        }
+
+        val metadata = PaginationMetadata(
+            totalRecords = totalRecords.toInt(),
+            currentPage = page,
+            totalPages = totalPages,
+            nextPage = if (page < totalPages) page + 1 else null,
+            prevPage = if (page > 1) page - 1 else null
+        )
+
+        return Pair(questions, metadata)
+    }
+
+    override suspend fun getTotalQuestions(): Long {
+        return collection.countDocuments()
     }
 
     override suspend fun getQuestionById(id: String): Question? {
@@ -61,5 +98,17 @@ class QuestionRepoImpl(
 
     override suspend fun deleteQuestion(id: String): Boolean {
         return collection.deleteOne(Filters.eq(ID, id)).wasAcknowledged()
+    }
+
+    override suspend fun getRandomQuestionsByTag(tag: String, size: Int): List<Question> {
+        val internalTagFilter = Filters.eq(Tag::tag.name, tag)
+        val filter = Filters.elemMatch(Question::tags.name, internalTagFilter)
+        
+        return collection.aggregate(
+            listOf(
+                Aggregates.match(filter),
+                Aggregates.sample(size)
+            )
+        ).toList()
     }
 }

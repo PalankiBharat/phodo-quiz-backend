@@ -19,7 +19,7 @@ class TagRepoImpl(
     }
 
     override suspend fun addTag(tag: String): Boolean {
-        collection.createIndex(Indexes.text(Tag::tag.name), IndexOptions().unique(true))
+        collection.createIndex(Indexes.ascending(Tag::tag.name), IndexOptions().unique(true))
         return collection.insertOne(Tag(tag = tag)).wasAcknowledged()
     }
 
@@ -37,7 +37,9 @@ class TagRepoImpl(
     }
 
     override suspend fun areTagsPresent(tags: List<String>): Boolean {
-        return collection.countDocuments(Filters.`in`(Tag::tag.name, tags)) == tags.size.toLong()
+        val tagsCollected = collection.countDocuments(Filters.`in`(Tag::tag.name, tags))
+        val check = tagsCollected == tags.distinct().size.toLong()
+        return check
     }
 
 }

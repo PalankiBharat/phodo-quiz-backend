@@ -4,6 +4,7 @@ import com.iapprusher.application.utils.okResult
 import com.iapprusher.application.data.request.QuestionRequest
 import com.iapprusher.application.data.response.BasicResponseModel
 import com.iapprusher.application.data.response.QuestionResponse
+import com.iapprusher.application.data.response.PaginatedQuestionResponse
 import com.iapprusher.application.data.response.failureResponse
 import com.iapprusher.application.data.response.successResponse
 import com.iapprusher.application.utils.safeServerCall
@@ -85,15 +86,49 @@ class QuestionService(
         }
     }
 
-    suspend fun getQuestionsByTag(tag: String, size:Int?): Pair<HttpStatusCode, BasicResponseModel<List<QuestionResponse>>> {
+    suspend fun getQuestionsByTagPaginated(
+        tag: String,
+        page: Int,
+        size: Int
+    ): Pair<HttpStatusCode, BasicResponseModel<PaginatedQuestionResponse>> {
         return safeServerCall {
-            val questions = repo.getQuestionsByTag(tag, size).map {
-                it.toQuestionResponse()
-            }
+            val (questions, paginationMetadata) = repo.getQuestionsByTagPaginated(tag, page, size)
+            val paginatedResponse = PaginatedQuestionResponse(
+                questions = questions.map { it.toQuestionResponse() },
+                pagination = paginationMetadata
+            )
             if (questions.isEmpty()) {
                 okResult(failureResponse("No questions found"))
             } else {
-                okResult(successResponse("Questions found", questions))
+                okResult(successResponse("Questions found", paginatedResponse))
+            }
+        }
+    }
+
+    suspend fun getQuestionsPaginated(
+        page: Int,
+        size: Int
+    ): Pair<HttpStatusCode, BasicResponseModel<PaginatedQuestionResponse>> {
+        return safeServerCall {
+            val (questions, paginationMetadata) = repo.getQuestionsPaginated(page, size)
+            val paginatedResponse = PaginatedQuestionResponse(
+                questions = questions.map { it.toQuestionResponse() },
+                pagination = paginationMetadata
+            )
+            okResult(successResponse("Questions found", paginatedResponse))
+        }
+    }
+
+    suspend fun getRandomQuestionsByTag(
+        tag: String,
+        size: Int
+    ): Pair<HttpStatusCode, BasicResponseModel<List<QuestionResponse>>> {
+        return safeServerCall {
+            val questions = repo.getRandomQuestionsByTag(tag, size)
+            if (questions.isEmpty()) {
+                okResult(failureResponse("No questions found"))
+            } else {
+                okResult(successResponse("Questions found", questions.map { it.toQuestionResponse() }))
             }
         }
     }

@@ -14,6 +14,7 @@ data class Question(
     val question: String,
     val tags: List<Tag>,
     val options: List<Option>,
+    val questionImage:String,
     @Serializable(with = InstantAsBsonDateTime::class)
     val createdAt: Instant,
 ){
@@ -23,7 +24,8 @@ data class Question(
             question = question,
             tags = tags,
             options = options,
-            createdAt = createdAt.toString()
+            createdAt = createdAt.toString(),
+            questionImage = questionImage
         )
     }
 }
@@ -32,6 +34,7 @@ data class Question(
 @Serializable
 data class Option(
     val option: String,
-    val isCorrect: Boolean
+    val isCorrect: Boolean,
+    val optionImage:String
 )
 
