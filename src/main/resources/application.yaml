@@ -5,6 +5,8 @@ ktor:
     deployment:
         port: 8080
 jwt:
+  secret: "7192873h12hkhq9183hjqhadh90183hadkhjdh"
+  issuer: "${JWT_ISSUER:-phodo-quiz-backend}"
   domain: "https://jwt-provider-domain/"
   audience: "jwt-audience"
   realm: "ktor sample app"
@@ -17,4 +19,3 @@ db:
     port: 27017
     maxPoolSize: 10
     database.name: "phodo_quiz-db"
-

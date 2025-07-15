@@ -1,0 +1,32 @@
+### User Info API Test
+# This file contains HTTP requests for testing the User Info API endpoint.
+# It demonstrates how to retrieve user information from a JWT token.
+
+### Get User Information
+GET http://localhost:8080/v1/user-info
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### Response for successful user info retrieval:
+# {
+#   "status": "Success",
+#   "message": "User info retrieved successfully",
+#   "data": {
+#     "userId": "user_id",
+#     "email": "user[at]example.com",
+#     "name": "User Name"
+#   }
+# }
+
+### Response for invalid or expired token:
+# {
+#   "status": "Failure",
+#   "message": "Unauthorized: Invalid or expired token",
+#   "data": null
+# }
+
+### Notes:
+# 1. Replace "YOUR_JWT_TOKEN" with a valid JWT token obtained from the authentication endpoint
+# 2. This endpoint extracts user information directly from the JWT token
+# 3. No request body is required for this endpoint
+# 4. The Authorization header is required to identify the user
+# 5. This endpoint is useful for verifying that a token is valid and contains the expected user information

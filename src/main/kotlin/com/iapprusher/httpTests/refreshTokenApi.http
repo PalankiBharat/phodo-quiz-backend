@@ -1,0 +1,17 @@
+### Refresh Token
+POST http://localhost:8080/v1/auth/refresh-token
+Content-Type: application/json
+
+{
+  "refreshToken": "your-refresh-token-here"
+}
+
+### Response example
+# {
+#   "success": true,
+#   "message": "Token refreshed successfully",
+#   "data": {
+#     "accessToken": "new-access-token",
+#     "refreshToken": "new-refresh-token"
+#   }
+# }

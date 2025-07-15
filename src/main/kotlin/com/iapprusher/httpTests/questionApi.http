@@ -1,0 +1,167 @@
+### Question API Test
+# This file contains HTTP requests for testing the Question API endpoints.
+# It demonstrates how to create, read, update, and delete questions.
+
+### Create a new question
+POST http://localhost:8080/v1/questions
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+{
+  "title": "What is Kotlin?",
+  "content": "Can someone explain what Kotlin is and its main features?",
+  "tags": ["kotlin", "programming"]
+}
+
+### Response for successful question creation:
+# {
+#   "status": "Success",
+#   "message": "Question added successfully",
+#   "data": {
+#     "id": "question_id",
+#     "title": "What is Kotlin?",
+#     "content": "Can someone explain what Kotlin is and its main features?",
+#     "tags": ["kotlin", "programming"],
+#     "createdAt": "2023-06-15T10:30:00Z",
+#     "updatedAt": "2023-06-15T10:30:00Z"
+#   }
+# }
+
+### Get a question by ID
+GET http://localhost:8080/v1/questions/question_id
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### Response for successful question retrieval:
+# {
+#   "status": "Success",
+#   "message": "Question retrieved successfully",
+#   "data": {
+#     "id": "question_id",
+#     "title": "What is Kotlin?",
+#     "content": "Can someone explain what Kotlin is and its main features?",
+#     "tags": ["kotlin", "programming"],
+#     "createdAt": "2023-06-15T10:30:00Z",
+#     "updatedAt": "2023-06-15T10:30:00Z"
+#   }
+# }
+
+### Update a question
+POST http://localhost:8080/v1/questions/question_id
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+{
+  "title": "What is Kotlin and why use it?",
+  "content": "Can someone explain what Kotlin is, its main features, and why it's preferred over Java?",
+  "tags": ["kotlin", "programming", "java"]
+}
+
+### Response for successful question update:
+# {
+#   "status": "Success",
+#   "message": "Question updated successfully",
+#   "data": {
+#     "id": "question_id",
+#     "title": "What is Kotlin and why use it?",
+#     "content": "Can someone explain what Kotlin is, its main features, and why it's preferred over Java?",
+#     "tags": ["kotlin", "programming", "java"],
+#     "createdAt": "2023-06-15T10:30:00Z",
+#     "updatedAt": "2023-06-15T11:15:00Z"
+#   }
+# }
+
+### Delete a question
+DELETE http://localhost:8080/v1/questions/question_id
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### Response for successful question deletion:
+# {
+#   "status": "Success",
+#   "message": "Question deleted successfully",
+#   "data": null
+# }
+
+### Get paginated questions
+GET http://localhost:8080/v1/questions?page=1&size=10
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### Response for paginated questions:
+# {
+#   "status": "Success",
+#   "message": "Questions retrieved successfully",
+#   "data": {
+#     "items": [
+#       {
+#         "id": "question_id_1",
+#         "title": "Question 1",
+#         "content": "Content 1",
+#         "tags": ["tag1", "tag2"],
+#         "createdAt": "2023-06-15T10:30:00Z",
+#         "updatedAt": "2023-06-15T10:30:00Z"
+#       },
+#       {
+#         "id": "question_id_2",
+#         "title": "Question 2",
+#         "content": "Content 2",
+#         "tags": ["tag2", "tag3"],
+#         "createdAt": "2023-06-15T11:30:00Z",
+#         "updatedAt": "2023-06-15T11:30:00Z"
+#       }
+#     ],
+#     "page": 1,
+#     "size": 10,
+#     "total": 2
+#   }
+# }
+
+### Get questions by tag (paginated)
+GET http://localhost:8080/v1/questions/tags?tag=kotlin&page=1&size=10
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### Response for questions by tag:
+# {
+#   "status": "Success",
+#   "message": "Questions retrieved successfully",
+#   "data": {
+#     "items": [
+#       {
+#         "id": "question_id_1",
+#         "title": "What is Kotlin?",
+#         "content": "Can someone explain what Kotlin is and its main features?",
+#         "tags": ["kotlin", "programming"],
+#         "createdAt": "2023-06-15T10:30:00Z",
+#         "updatedAt": "2023-06-15T10:30:00Z"
+#       }
+#     ],
+#     "page": 1,
+#     "size": 10,
+#     "total": 1
+#   }
+# }
+
+### Get random questions by tag
+GET http://localhost:8080/v1/questions/tags/random?tag=kotlin&size=5
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### Response for random questions by tag:
+# {
+#   "status": "Success",
+#   "message": "Questions retrieved successfully",
+#   "data": [
+#     {
+#       "id": "question_id_1",
+#       "title": "What is Kotlin?",
+#       "content": "Can someone explain what Kotlin is and its main features?",
+#       "tags": ["kotlin", "programming"],
+#       "createdAt": "2023-06-15T10:30:00Z",
+#       "updatedAt": "2023-06-15T10:30:00Z"
+#     }
+#   ]
+# }
+
+### Notes:
+# 1. Replace "YOUR_JWT_TOKEN" with a valid JWT token obtained from the authentication endpoint
+# 2. Replace "question_id" with an actual question ID from your database
+# 3. The page and size parameters are optional for paginated endpoints (defaults: page=1, size=10)
+# 4. For tag-based queries, ensure the tag exists in the system
+# 5. The Authorization header is required for all endpoints to identify the user

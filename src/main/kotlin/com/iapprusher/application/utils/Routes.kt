@@ -10,6 +10,12 @@ object Routes {
         const val ROUTE = "tag"
         const val ID = "id"
     }
+    object Auth {
+        const val ROUTE = "auth"
+        const val GOOGLE_SIGNIN = "google-signin"
+        const val REFRESH_TOKEN = "refresh-token"
+        const val ID = "id"
+    }
 
     const val PAGE = "page"
     const val SIZE = "size"

@@ -53,4 +53,14 @@ dependencies {
     testImplementation(libs.kotlin.test.junit)
     implementation("org.mongodb:bson-kotlinx:5.2.1")
 
+    // Testing dependencies
+    testImplementation("io.mockk:mockk:1.13.8")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("io.insert-koin:koin-test:3.5.0")
+    testImplementation("io.insert-koin:koin-test-junit4:3.5.0")
+
+    // Google API Client for verifying ID tokens
+    implementation("com.google.api-client:google-api-client:2.2.0")
+    implementation("com.google.oauth-client:google-oauth-client:1.34.1")
+    implementation("com.google.http-client:google-http-client-gson:1.43.3")
 }

@@ -28,6 +28,7 @@ Here's a list of features included in this project:
 | [Authentication OAuth](https://start.ktor.io/p/auth-oauth)             | Handles OAuth Bearer authentication scheme                                         |
 | [Authentication Basic](https://start.ktor.io/p/auth-basic)             | Handles 'Basic' username / password authentication scheme                          |
 | [Authentication JWT](https://start.ktor.io/p/auth-jwt)                 | Handles JSON Web Token (JWT) bearer authentication scheme                          |
+| Google Sign-in                                                         | Authenticates users with Google Sign-in and generates JWT tokens                   |
 
 ## Building & Running
 
@@ -50,3 +51,57 @@ If the server starts successfully, you'll see the following output:
 2024-12-04 14:32:45.682 [main] INFO  Application - Responding at http://0.0.0.0:8080
 ```
 
+## Google Sign-in Integration
+
+This project includes a Google Sign-in API that allows users to authenticate using their Google accounts. The API verifies the ID token from Google, creates or updates the user in the database, and returns a JWT token for subsequent authenticated requests.
+
+### API Endpoint
+
+```
+POST /v1/auth/google-signin
+```
+
+#### Request Body
+
+```json
+{
+  "idToken": "Google ID token from client"
+}
+```
+
+#### Response
+
+```json
+{
+  "status": "Success",
+  "data": {
+    "user": {
+      "id": "user_id",
+      "email": "user@example.com",
+      "name": "User Name",
+      "profilePicUrl": "https://example.com/profile.jpg",
+      "createdAt": "2023-01-01T00:00:00Z",
+      "lastLoginAt": "2023-01-01T00:00:00Z"
+    },
+    "token": "JWT token for authentication"
+  },
+  "message": "Sign in successful"
+}
+```
+
+### Setup Instructions
+
+1. Create a Google Cloud project and configure OAuth credentials
+2. Set the following environment variables:
+   - `GOOGLE_CLIENT_ID`: Your Google OAuth client ID
+   - `JWT_SECRET`: Secret key for signing JWT tokens (default: "default_secret_change_in_production")
+   - `JWT_ISSUER`: Issuer for JWT tokens (default: "phodo-quiz-backend")
+   - `JWT_AUDIENCE`: Audience for JWT tokens (default: "phodo-quiz-app")
+   - `JWT_REALM`: Realm for JWT tokens (default: "phodo-quiz")
+
+### Testing
+
+The Google Sign-in feature includes comprehensive test coverage:
+- Unit tests for the UserRepo implementation
+- Unit tests for the AuthService
+- Integration tests for the API endpoint

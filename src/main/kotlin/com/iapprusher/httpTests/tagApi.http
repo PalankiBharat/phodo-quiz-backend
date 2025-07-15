@@ -1,0 +1,88 @@
+### Tag API Test
+# This file contains HTTP requests for testing the Tag API endpoints.
+# It demonstrates how to create, read, update, and delete tags.
+
+### Create a new tag
+POST http://localhost:8080/v1/tags
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+{
+  "tag": "kotlin"
+}
+
+### Response for successful tag creation:
+# {
+#   "status": "Success",
+#   "message": "Tag added successfully",
+#   "data": {
+#     "id": "tag_id",
+#     "tag": "kotlin",
+#     "createdAt": "2023-06-15T10:30:00Z",
+#     "updatedAt": "2023-06-15T10:30:00Z"
+#   }
+# }
+
+### Get all tags
+GET http://localhost:8080/v1/tags
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### Response for successful tags retrieval:
+# {
+#   "status": "Success",
+#   "message": "Tags retrieved successfully",
+#   "data": [
+#     {
+#       "id": "tag_id_1",
+#       "tag": "kotlin",
+#       "createdAt": "2023-06-15T10:30:00Z",
+#       "updatedAt": "2023-06-15T10:30:00Z"
+#     },
+#     {
+#       "id": "tag_id_2",
+#       "tag": "programming",
+#       "createdAt": "2023-06-15T11:30:00Z",
+#       "updatedAt": "2023-06-15T11:30:00Z"
+#     }
+#   ]
+# }
+
+### Edit a tag
+POST http://localhost:8080/v1/tags/edit
+Content-Type: application/json
+Authorization: Bearer YOUR_JWT_TOKEN
+
+{
+  "id": "tag_id",
+  "newTag": "kotlin-programming"
+}
+
+### Response for successful tag update:
+# {
+#   "status": "Success",
+#   "message": "Tag updated successfully",
+#   "data": {
+#     "id": "tag_id",
+#     "tag": "kotlin-programming",
+#     "createdAt": "2023-06-15T10:30:00Z",
+#     "updatedAt": "2023-06-15T11:15:00Z"
+#   }
+# }
+
+### Delete a tag
+DELETE http://localhost:8080/v1/tags?id=tag_id
+Authorization: Bearer YOUR_JWT_TOKEN
+
+### Response for successful tag deletion:
+# {
+#   "status": "Success",
+#   "message": "Tag deleted successfully",
+#   "data": null
+# }
+
+### Notes:
+# 1. Replace "YOUR_JWT_TOKEN" with a valid JWT token obtained from the authentication endpoint
+# 2. Replace "tag_id" with an actual tag ID from your database
+# 3. Tag names must be unique in the system
+# 4. The Authorization header is required for all endpoints to identify the user
+# 5. When a tag is deleted, it will also be removed from all questions that use it
