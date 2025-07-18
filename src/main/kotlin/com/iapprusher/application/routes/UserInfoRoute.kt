@@ -14,19 +14,19 @@ import io.ktor.server.routing.*
  */
 fun Route.userInfoRoute() {
     route(Routes.API_VERSION) {
-        route("/user-info") {
+        route("user-info") {
             // This route will return the user information extracted from the JWT token
             get {
                 val userId = JwtUtils.getUserId(call)
                 val userEmail = JwtUtils.getUserEmail(call)
                 val userName = JwtUtils.getUserName(call)
-                
+
                 val userInfo = mapOf(
                     "userId" to userId,
                     "email" to userEmail,
                     "name" to userName
                 )
-                
+
                 call.sendResponse(Pair(HttpStatusCode.OK, successResponse("User info retrieved successfully", userInfo)))
             }
         }

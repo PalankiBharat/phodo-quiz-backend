@@ -15,8 +15,7 @@ fun Application.configureSecurity() {
     val jwtIssuer = environment.config.property("jwt.domain").getString()
     val jwtAudience = environment.config.property("jwt.audience").getString()
     val jwtRealm = environment.config.property("jwt.realm").getString()
-
-    authentication {
+    install(Authentication) {
         jwt("auth-jwt") {
             realm = jwtRealm
             verifier(
@@ -33,9 +32,8 @@ fun Application.configureSecurity() {
                     null
                 }
             }
-            challenge { _, _ ->
-                call.response.headers.append("WWW-Authenticate", "Bearer")
-                call.respond(HttpStatusCode.Unauthorized, failureResponse<Unit>("Authentication required"))
+            challenge { defaultScheme, realm ->
+                call.respond(HttpStatusCode.Unauthorized, failureResponse<Unit>("Token is not valid or has expired"))
             }
         }
     }

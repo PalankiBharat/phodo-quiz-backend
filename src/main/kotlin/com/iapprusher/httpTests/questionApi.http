@@ -29,7 +29,7 @@ Authorization: Bearer YOUR_JWT_TOKEN
 
 ### Get a question by ID
 GET http://localhost:8080/v1/questions/question_id
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODc0YjVlMGNiMjJiYzUxYjkzZTU2NWMiLCJpc3MiOiJodHRwczovL2p3dC1wcm92aWRlci1kb21haW4vIiwiYXVkIjoiand0LWF1ZGllbmNlIiwiZW1haWwiOiJiazk3MzU3MzI3NzdAZ21haWwuY29tIiwibmFtZSI6IkJoYXJhdCBLdW1hciIsImV4cCI6MTc1Mjc2MzcxN30._WKBdi5Z2E2HRRqZoo158agH81z2I8ZpvOktOwuxjuo
 
 ### Response for successful question retrieval:
 # {
@@ -83,7 +83,7 @@ Authorization: Bearer YOUR_JWT_TOKEN
 
 ### Get paginated questions
 GET http://localhost:8080/v1/questions?page=1&size=10
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODc0YjVlMGNiMjJiYzUxYjkzZTU2NWMiLCJpc3MiOiJodHRwczovL2p3dC1wcm92aWRlci1kb21haW4vIiwiYXVkIjoiand0LWF1ZGllbmNlIiwiZW1haWwiOiJiazk3MzU3MzI3NzdAZ21haWwuY29tIiwibmFtZSI6IkJoYXJhdCBLdW1hciIsImV4cCI6MTc1Mjc2MzcxN30._WKBdi5Z2E2HRRqZoo158agH81z2I8ZpvOktOwuxjuo
 
 ### Response for paginated questions:
 # {
@@ -116,8 +116,7 @@ Authorization: Bearer YOUR_JWT_TOKEN
 
 ### Get questions by tag (paginated)
 GET http://localhost:8080/v1/questions/tags?tag=kotlin&page=1&size=10
-Authorization: Bearer YOUR_JWT_TOKEN
-
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODc0YjVlMGNiMjJiYzUxYjkzZTU2NWMiLCJpc3MiOiJodHRwczovL2p3dC1wcm92aWRlci1kb21haW4vIiwiYXVkIjoiand0LWF1ZGllbmNlIiwiZW1haWwiOiJiazk3MzU3MzI3NzdAZ21haWwuY29tIiwibmFtZSI6IkJoYXJhdCBLdW1hciIsImV4cCI6MTc1Mjc2MzcxN30._WKBdi5Z2E2HRRqZoo158agH81z2I8ZpvOktOwuxjuo
 ### Response for questions by tag:
 # {
 #   "status": "Success",
@@ -141,7 +140,7 @@ Authorization: Bearer YOUR_JWT_TOKEN
 
 ### Get random questions by tag
 GET http://localhost:8080/v1/questions/tags/random?tag=kotlin&size=5
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODc0YjVlMGNiMjJiYzUxYjkzZTU2NWMiLCJpc3MiOiJodHRwczovL2p3dC1wcm92aWRlci1kb21haW4vIiwiYXVkIjoiand0LWF1ZGllbmNlIiwiZW1haWwiOiJiazk3MzU3MzI3NzdAZ21haWwuY29tIiwibmFtZSI6IkJoYXJhdCBLdW1hciIsImV4cCI6MTc1Mjc2MzcxN30._WKBdi5Z2E2HRRqZoo158agH81z2I8ZpvOktOwuxjuo
 
 ### Response for random questions by tag:
 # {

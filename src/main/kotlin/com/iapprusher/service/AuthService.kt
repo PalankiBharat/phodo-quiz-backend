@@ -53,9 +53,9 @@ class AuthService(
             }
 
             val payload = idToken.payload
-            val email = payload.email
+            val email = payload.email ?: ""
             val name = payload["name"] as? String ?: ""
-            val pictureUrl = payload["picture"] as? String
+            val pictureUrl = payload["picture"] as? String ?:""
             val googleId = payload.subject
             // Check if user exists
             var user = userRepo.getUserByGoogleId(googleId)

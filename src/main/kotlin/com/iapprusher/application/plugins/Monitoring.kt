@@ -1,23 +1,22 @@
 package com.iapprusher.application.plugins
 
 import io.ktor.server.application.*
+import io.ktor.server.logging.toLogString
 import io.ktor.server.plugins.*
 import io.ktor.server.plugins.calllogging.*
 import io.ktor.server.request.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.withContext
-import org.koin.core.logger.Logger
 import org.slf4j.event.*
 
 fun Application.configureMonitoring() {
+    // Configure request and response logging
     install(CallLogging) {
-        level = Level.ERROR
+        level = Level.INFO
         filter { call -> call.request.path().startsWith("/") }
         format { call ->
             val status = call.response.status()
             val httpMethod = call.request.httpMethod.value
             val userAgent = call.request.headers["User-Agent"]
+            val auth = call.request.headers["Authorization"] ?: "No Authorization Header"
             val path = call.request.path()
             val queryParams =
                 call.request.queryParameters
@@ -25,6 +24,8 @@ fun Application.configureMonitoring() {
                     .joinToString(", ") { "${it.key}=${it.value}" }
             val duration = call.processingTimeMillis()
             val remoteHost = call.request.origin.remoteHost
+            val request = call.request.toLogString()
+            val response = call.response.toString()
             val coloredStatus =
                 when {
                     status == null -> "\u001B[33mUNKNOWN\u001B[0m"
@@ -40,9 +41,12 @@ fun Application.configureMonitoring() {
             |Method: $coloredMethod
             |Path: $path
             |Query Params: $queryParams
+            |Authorization: $auth
             |Remote Host: $remoteHost
             |User Agent: $userAgent
             |Duration: ${duration}ms
+            |Log Request: $request
+            | Response: $response
             |------------------------------------------------------------------
             |
       """.trimMargin()

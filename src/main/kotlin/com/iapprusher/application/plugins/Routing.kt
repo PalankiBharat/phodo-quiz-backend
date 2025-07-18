@@ -11,13 +11,17 @@ import io.ktor.server.routing.*
 fun Application.configureRouting() {
     routing {
         // Public routes (no authentication required)
-        authRoute()
+        route("/") {
+            authRoute()
+        }
 
         // Protected routes (JWT authentication required)
         authenticate("auth-jwt") {
-            questionRoute()
-            tagRoute()
-            userInfoRoute() // Example route that demonstrates JWT user info extraction
+            route("/") {
+                questionRoute()
+                tagRoute()
+                userInfoRoute() // Example route that demonstrates JWT user info extraction
+            }
         }
     }
 }
