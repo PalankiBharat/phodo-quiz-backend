@@ -3,54 +3,45 @@
 # It demonstrates how to create, read, update, and delete tags.
 
 ### Create a new tag
-POST http://localhost:8080/v1/tags
+POST {{baseUrl}}/v1/tag
 Content-Type: application/json
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer {{bearerToken}}
 
 {
-  "tag": "kotlin"
+  "tag": "programming"
 }
 
 ### Response for successful tag creation:
 # {
 #   "status": "Success",
-#   "message": "Tag added successfully",
-#   "data": {
-#     "id": "tag_id",
-#     "tag": "kotlin",
-#     "createdAt": "2023-06-15T10:30:00Z",
-#     "updatedAt": "2023-06-15T10:30:00Z"
-#   }
+#   "message": "Tag added",
+#   "data": true
 # }
 
 ### Get all tags
-GET http://localhost:8080/v1/tags
-Authorization: Bearer YOUR_JWT_TOKEN
+GET {{baseUrl}}/v1/tag
+Authorization: Bearer {{bearerToken}}
 
 ### Response for successful tags retrieval:
 # {
 #   "status": "Success",
-#   "message": "Tags retrieved successfully",
+#   "message": "Tags found",
 #   "data": [
 #     {
 #       "id": "tag_id_1",
-#       "tag": "kotlin",
-#       "createdAt": "2023-06-15T10:30:00Z",
-#       "updatedAt": "2023-06-15T10:30:00Z"
+#       "tag": "kotlin"
 #     },
 #     {
 #       "id": "tag_id_2",
-#       "tag": "programming",
-#       "createdAt": "2023-06-15T11:30:00Z",
-#       "updatedAt": "2023-06-15T11:30:00Z"
+#       "tag": "programming"
 #     }
 #   ]
 # }
 
 ### Edit a tag
-POST http://localhost:8080/v1/tags/edit
+POST {{baseUrl}}/v1/tag/edit
 Content-Type: application/json
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer {{bearerToken}}
 
 {
   "id": "tag_id",
@@ -60,29 +51,25 @@ Authorization: Bearer YOUR_JWT_TOKEN
 ### Response for successful tag update:
 # {
 #   "status": "Success",
-#   "message": "Tag updated successfully",
-#   "data": {
-#     "id": "tag_id",
-#     "tag": "kotlin-programming",
-#     "createdAt": "2023-06-15T10:30:00Z",
-#     "updatedAt": "2023-06-15T11:15:00Z"
-#   }
+#   "message": "Tag edited",
+#   "data": true
 # }
 
 ### Delete a tag
-DELETE http://localhost:8080/v1/tags?id=tag_id
-Authorization: Bearer YOUR_JWT_TOKEN
+DELETE {{baseUrl}}/v1/tag?id=tag_id
+Authorization: Bearer {{bearerToken}}
 
 ### Response for successful tag deletion:
 # {
 #   "status": "Success",
-#   "message": "Tag deleted successfully",
-#   "data": null
+#   "message": "Tag deleted",
+#   "data": true
 # }
 
 ### Notes:
-# 1. Replace "YOUR_JWT_TOKEN" with a valid JWT token obtained from the authentication endpoint
+# 1. The Bearer token is stored in the environment variable {{bearerToken}}
 # 2. Replace "tag_id" with an actual tag ID from your database
 # 3. Tag names must be unique in the system
 # 4. The Authorization header is required for all endpoints to identify the user
 # 5. When a tag is deleted, it will also be removed from all questions that use it
+# 6. To change the environment, use the environment selector in the HTTP client

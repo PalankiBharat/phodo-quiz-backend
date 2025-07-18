@@ -1,23 +1,750 @@
 openapi: "3.0.3"
 info:
-  title: "Application API"
-  description: "Application API"
+  title: "Phodo Quiz API"
+  description: "API for the Phodo Quiz application, providing authentication, question management, tag management, and user information endpoints."
   version: "1.0.0"
 servers:
   - url: "http://0.0.0.0:8080"
 paths:
-  /:
-    get:
-      description: "Hello World!"
+  # Authentication Routes
+  /api/v1/auth/google-signin:
+    post:
+      tags:
+        - "Authentication"
+      summary: "Google Sign-in"
+      description: "Authenticates a user with Google Sign-in"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GoogleSignInRequest"
       responses:
         "200":
-          description: "OK"
+          description: "Authentication successful"
           content:
-            text/plain:
+            application/json:
               schema:
-                type: "string"
-              examples:
-                Example#1:
-                  value: "Hello World!"
+                $ref: "#/components/schemas/AuthResponse"
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Authentication failed"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+  /api/v1/auth/refresh-token:
+    post:
+      tags:
+        - "Authentication"
+      summary: "Refresh Token"
+      description: "Refreshes an access token using a refresh token"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/RefreshTokenRequest"
+      responses:
+        "200":
+          description: "Token refresh successful"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/TokenResponse"
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Invalid refresh token"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+  # Question Routes
+  /api/v1/questions:
+    get:
+      tags:
+        - "Questions"
+      summary: "Get Paginated Questions"
+      description: "Retrieves a paginated list of all questions"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: "page"
+          in: "query"
+          description: "Page number (defaults to 1)"
+          required: false
+          schema:
+            type: "integer"
+            default: 1
+        - name: "size"
+          in: "query"
+          description: "Number of items per page (defaults to 10)"
+          required: false
+          schema:
+            type: "integer"
+            default: 10
+      responses:
+        "200":
+          description: "List of questions"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedQuestionResponse"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+    post:
+      tags:
+        - "Questions"
+      summary: "Add Question"
+      description: "Creates a new question in the system"
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionRequest"
+      responses:
+        "200":
+          description: "Question created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+  /api/v1/questions/{id}:
+    get:
+      tags:
+        - "Questions"
+      summary: "Get Question by ID"
+      description: "Retrieves a specific question by its ID"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Question ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Question details"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuestionResponse"
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "404":
+          description: "Question not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+    post:
+      tags:
+        - "Questions"
+      summary: "Update Question"
+      description: "Updates an existing question by its ID"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Question ID"
+          required: true
+          schema:
+            type: "string"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/QuestionRequest"
+      responses:
+        "200":
+          description: "Question updated successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "404":
+          description: "Question not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+    delete:
+      tags:
+        - "Questions"
+      summary: "Delete Question"
+      description: "Deletes a specific question by its ID"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: "id"
+          in: "path"
+          description: "Question ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Question deleted successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "404":
+          description: "Question not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+  /api/v1/questions/tags:
+    get:
+      tags:
+        - "Questions"
+      summary: "Get Questions by Tag"
+      description: "Retrieves a paginated list of questions filtered by a specific tag"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: "tag"
+          in: "query"
+          description: "Tag to filter questions by"
+          required: true
+          schema:
+            type: "string"
+        - name: "page"
+          in: "query"
+          description: "Page number (defaults to 1)"
+          required: false
+          schema:
+            type: "integer"
+            default: 1
+        - name: "size"
+          in: "query"
+          description: "Number of items per page (defaults to 10)"
+          required: false
+          schema:
+            type: "integer"
+            default: 10
+      responses:
+        "200":
+          description: "List of questions with the specified tag"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PaginatedQuestionResponse"
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+  /api/v1/questions/tags/random:
+    get:
+      tags:
+        - "Questions"
+      summary: "Get Random Questions by Tag"
+      description: "Retrieves a random set of questions for a specific tag"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: "tag"
+          in: "query"
+          description: "Tag to filter questions by"
+          required: true
+          schema:
+            type: "string"
+        - name: "size"
+          in: "query"
+          description: "Number of random questions to return (defaults to 10)"
+          required: false
+          schema:
+            type: "integer"
+            default: 10
+      responses:
+        "200":
+          description: "Random list of questions with the specified tag"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+  # Tag Routes
+  /api/v1/tags:
+    get:
+      tags:
+        - "Tags"
+      summary: "Get All Tags"
+      description: "Retrieves all tags in the system"
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: "List of all tags"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+    post:
+      tags:
+        - "Tags"
+      summary: "Add Tag"
+      description: "Creates a new tag in the system"
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TagRequest"
+      responses:
+        "200":
+          description: "Tag created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+    delete:
+      tags:
+        - "Tags"
+      summary: "Delete Tag"
+      description: "Deletes a specific tag by its ID"
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: "id"
+          in: "query"
+          description: "Tag ID"
+          required: true
+          schema:
+            type: "string"
+      responses:
+        "200":
+          description: "Tag deleted successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "404":
+          description: "Tag not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+  /api/v1/tags/edit:
+    post:
+      tags:
+        - "Tags"
+      summary: "Edit Tag"
+      description: "Edits an existing tag"
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/EditTagRequest"
+      responses:
+        "200":
+          description: "Tag updated successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "400":
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "404":
+          description: "Tag not found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
+  # User Info Route
+  /api/v1/user-info:
+    get:
+      tags:
+        - "User"
+      summary: "Get User Info"
+      description: "Returns the user information extracted from the JWT token"
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: "User information"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+        "401":
+          description: "Unauthorized"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BasicResponseModel"
+
 components:
-  schemas: {}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    # Request Models
+    GoogleSignInRequest:
+      type: object
+      required:
+        - idToken
+      properties:
+        idToken:
+          type: string
+          description: "Google ID token"
+
+    RefreshTokenRequest:
+      type: object
+      required:
+        - refreshToken
+      properties:
+        refreshToken:
+          type: string
+          description: "Refresh token for obtaining a new access token"
+
+    QuestionRequest:
+      type: object
+      required:
+        - question
+        - tags
+        - options
+        - questionImage
+      properties:
+        question:
+          type: string
+          description: "The question text"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/TagRequest"
+          description: "List of tags associated with the question"
+        options:
+          type: array
+          items:
+            $ref: "#/components/schemas/Option"
+          description: "List of answer options for the question"
+        questionImage:
+          type: string
+          description: "URL or base64 encoded image for the question"
+
+    TagRequest:
+      type: object
+      required:
+        - tag
+      properties:
+        tag:
+          type: string
+          description: "Tag name"
+
+    EditTagRequest:
+      type: object
+      required:
+        - id
+        - newTag
+      properties:
+        id:
+          type: string
+          description: "ID of the tag to edit"
+        newTag:
+          type: string
+          description: "New tag name"
+
+    # Response Models
+    BasicResponseModel:
+      type: object
+      properties:
+        status:
+          type: string
+          description: "Response status (Success or Failure)"
+        data:
+          type: object
+          description: "Response data (can be null)"
+        message:
+          type: string
+          description: "Response message"
+
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "User ID"
+        email:
+          type: string
+          description: "User email"
+        name:
+          type: string
+          description: "User name"
+        profilePicUrl:
+          type: string
+          nullable: true
+          description: "URL to user's profile picture (can be null)"
+        createdAt:
+          type: string
+          description: "User creation timestamp"
+        lastLoginAt:
+          type: string
+          description: "User's last login timestamp"
+
+    AuthResponse:
+      type: object
+      properties:
+        user:
+          $ref: "#/components/schemas/UserResponse"
+          description: "User information"
+        accessToken:
+          type: string
+          description: "JWT access token"
+        refreshToken:
+          type: string
+          description: "JWT refresh token"
+
+    TokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+          description: "JWT access token"
+        refreshToken:
+          type: string
+          description: "JWT refresh token"
+
+    QuestionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Question ID"
+        question:
+          type: string
+          description: "Question text"
+        tags:
+          type: array
+          items:
+            $ref: "#/components/schemas/Tag"
+          description: "List of tags associated with the question"
+        options:
+          type: array
+          items:
+            $ref: "#/components/schemas/Option"
+          description: "List of answer options"
+        createdAt:
+          type: string
+          description: "Question creation timestamp"
+        questionImage:
+          type: string
+          description: "URL or base64 encoded image for the question"
+
+    PaginatedQuestionResponse:
+      type: object
+      properties:
+        questions:
+          type: array
+          items:
+            $ref: "#/components/schemas/QuestionResponse"
+          description: "List of questions"
+        pagination:
+          $ref: "#/components/schemas/PaginationMetadata"
+          description: "Pagination information"
+
+    PaginationMetadata:
+      type: object
+      properties:
+        totalRecords:
+          type: integer
+          description: "Total number of records"
+        currentPage:
+          type: integer
+          description: "Current page number"
+        totalPages:
+          type: integer
+          description: "Total number of pages"
+        nextPage:
+          type: integer
+          nullable: true
+          description: "Next page number (null if no next page)"
+        prevPage:
+          type: integer
+          nullable: true
+          description: "Previous page number (null if no previous page)"
+
+    TagResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          description: "Tag ID"
+        tag:
+          type: string
+          description: "Tag name"
+
+    Tag:
+      type: object
+      properties:
+        id:
+          type: string
+          nullable: true
+          description: "Tag ID (null for new tags)"
+        tag:
+          type: string
+          description: "Tag name"
+
+    Option:
+      type: object
+      required:
+        - option
+        - isCorrect
+        - optionImage
+      properties:
+        option:
+          type: string
+          description: "Option text"
+        isCorrect:
+          type: boolean
+          description: "Whether this option is correct"
+        optionImage:
+          type: string
+          description: "URL or base64 encoded image for the option"

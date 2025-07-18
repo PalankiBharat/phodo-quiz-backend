@@ -3,14 +3,34 @@
 # It demonstrates how to create, read, update, and delete questions.
 
 ### Create a new question
-POST http://localhost:8080/v1/questions
+POST {{baseUrl}}/v1/question
 Content-Type: application/json
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer {{bearerToken}}
 
 {
-  "title": "What is Kotlin?",
-  "content": "Can someone explain what Kotlin is and its main features?",
-  "tags": ["kotlin", "programming"]
+  "question": "What is Kotlin?",
+  "tags": [
+    {"tag": "kotlin"},
+    {"tag": "programming"}
+  ],
+  "options": [
+    {
+      "option": "A programming language developed by JetBrains",
+      "isCorrect": true,
+      "optionImage": ""
+    },
+    {
+      "option": "A database management system",
+      "isCorrect": false,
+      "optionImage": ""
+    },
+    {
+      "option": "A web framework",
+      "isCorrect": false,
+      "optionImage": ""
+    }
+  ],
+  "questionImage": ""
 }
 
 ### Response for successful question creation:
@@ -19,17 +39,36 @@ Authorization: Bearer YOUR_JWT_TOKEN
 #   "message": "Question added successfully",
 #   "data": {
 #     "id": "question_id",
-#     "title": "What is Kotlin?",
-#     "content": "Can someone explain what Kotlin is and its main features?",
-#     "tags": ["kotlin", "programming"],
+#     "question": "What is Kotlin?",
+#     "tags": [
+#       {"id": "tag_id_1", "tag": "kotlin"},
+#       {"id": "tag_id_2", "tag": "programming"}
+#     ],
+#     "options": [
+#       {
+#         "option": "A programming language developed by JetBrains",
+#         "isCorrect": true,
+#         "optionImage": ""
+#       },
+#       {
+#         "option": "A database management system",
+#         "isCorrect": false,
+#         "optionImage": ""
+#       },
+#       {
+#         "option": "A web framework",
+#         "isCorrect": false,
+#         "optionImage": ""
+#       }
+#     ],
 #     "createdAt": "2023-06-15T10:30:00Z",
-#     "updatedAt": "2023-06-15T10:30:00Z"
+#     "questionImage": ""
 #   }
 # }
 
 ### Get a question by ID
-GET http://localhost:8080/v1/questions/question_id
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODc0YjVlMGNiMjJiYzUxYjkzZTU2NWMiLCJpc3MiOiJodHRwczovL2p3dC1wcm92aWRlci1kb21haW4vIiwiYXVkIjoiand0LWF1ZGllbmNlIiwiZW1haWwiOiJiazk3MzU3MzI3NzdAZ21haWwuY29tIiwibmFtZSI6IkJoYXJhdCBLdW1hciIsImV4cCI6MTc1Mjc2MzcxN30._WKBdi5Z2E2HRRqZoo158agH81z2I8ZpvOktOwuxjuo
+GET {{baseUrl}}/v1/question/question_id
+Authorization: Bearer {{bearerToken}}
 
 ### Response for successful question retrieval:
 # {
@@ -37,23 +76,63 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODc0YjVlM
 #   "message": "Question retrieved successfully",
 #   "data": {
 #     "id": "question_id",
-#     "title": "What is Kotlin?",
-#     "content": "Can someone explain what Kotlin is and its main features?",
-#     "tags": ["kotlin", "programming"],
+#     "question": "What is Kotlin?",
+#     "tags": [
+#       {"id": "tag_id_1", "tag": "kotlin"},
+#       {"id": "tag_id_2", "tag": "programming"}
+#     ],
+#     "options": [
+#       {
+#         "option": "A programming language developed by JetBrains",
+#         "isCorrect": true,
+#         "optionImage": ""
+#       },
+#       {
+#         "option": "A database management system",
+#         "isCorrect": false,
+#         "optionImage": ""
+#       },
+#       {
+#         "option": "A web framework",
+#         "isCorrect": false,
+#         "optionImage": ""
+#       }
+#     ],
 #     "createdAt": "2023-06-15T10:30:00Z",
-#     "updatedAt": "2023-06-15T10:30:00Z"
+#     "questionImage": ""
 #   }
 # }
 
 ### Update a question
-POST http://localhost:8080/v1/questions/question_id
+POST {{baseUrl}}/v1/question/question_id
 Content-Type: application/json
-Authorization: Bearer YOUR_JWT_TOKEN
+Authorization: Bearer {{bearerToken}}
 
 {
-  "title": "What is Kotlin and why use it?",
-  "content": "Can someone explain what Kotlin is, its main features, and why it's preferred over Java?",
-  "tags": ["kotlin", "programming", "java"]
+  "question": "What is Kotlin and why use it?",
+  "tags": [
+    {"tag": "kotlin"},
+    {"tag": "programming"},
+    {"tag": "java"}
+  ],
+  "options": [
+    {
+      "option": "A programming language developed by JetBrains that improves upon Java",
+      "isCorrect": true,
+      "optionImage": ""
+    },
+    {
+      "option": "A database management system with Java integration",
+      "isCorrect": false,
+      "optionImage": ""
+    },
+    {
+      "option": "A web framework for Java applications",
+      "isCorrect": false,
+      "optionImage": ""
+    }
+  ],
+  "questionImage": ""
 }
 
 ### Response for successful question update:
@@ -62,17 +141,37 @@ Authorization: Bearer YOUR_JWT_TOKEN
 #   "message": "Question updated successfully",
 #   "data": {
 #     "id": "question_id",
-#     "title": "What is Kotlin and why use it?",
-#     "content": "Can someone explain what Kotlin is, its main features, and why it's preferred over Java?",
-#     "tags": ["kotlin", "programming", "java"],
+#     "question": "What is Kotlin and why use it?",
+#     "tags": [
+#       {"id": "tag_id_1", "tag": "kotlin"},
+#       {"id": "tag_id_2", "tag": "programming"},
+#       {"id": "tag_id_3", "tag": "java"}
+#     ],
+#     "options": [
+#       {
+#         "option": "A programming language developed by JetBrains that improves upon Java",
+#         "isCorrect": true,
+#         "optionImage": ""
+#       },
+#       {
+#         "option": "A database management system with Java integration",
+#         "isCorrect": false,
+#         "optionImage": ""
+#       },
+#       {
+#         "option": "A web framework for Java applications",
+#         "isCorrect": false,
+#         "optionImage": ""
+#       }
+#     ],
 #     "createdAt": "2023-06-15T10:30:00Z",
-#     "updatedAt": "2023-06-15T11:15:00Z"
+#     "questionImage": ""
 #   }
 # }
 
 ### Delete a question
-DELETE http://localhost:8080/v1/questions/question_id
-Authorization: Bearer YOUR_JWT_TOKEN
+DELETE {{baseUrl}}/v1/question/question_id
+Authorization: Bearer {{bearerToken}}
 
 ### Response for successful question deletion:
 # {
@@ -82,66 +181,121 @@ Authorization: Bearer YOUR_JWT_TOKEN
 # }
 
 ### Get paginated questions
-GET http://localhost:8080/v1/questions?page=1&size=10
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODc0YjVlMGNiMjJiYzUxYjkzZTU2NWMiLCJpc3MiOiJodHRwczovL2p3dC1wcm92aWRlci1kb21haW4vIiwiYXVkIjoiand0LWF1ZGllbmNlIiwiZW1haWwiOiJiazk3MzU3MzI3NzdAZ21haWwuY29tIiwibmFtZSI6IkJoYXJhdCBLdW1hciIsImV4cCI6MTc1Mjc2MzcxN30._WKBdi5Z2E2HRRqZoo158agH81z2I8ZpvOktOwuxjuo
+GET {{baseUrl}}/v1/question?page=1&size=10
+Authorization: Bearer {{bearerToken}}
 
 ### Response for paginated questions:
 # {
 #   "status": "Success",
 #   "message": "Questions retrieved successfully",
 #   "data": {
-#     "items": [
+#     "questions": [
 #       {
 #         "id": "question_id_1",
-#         "title": "Question 1",
-#         "content": "Content 1",
-#         "tags": ["tag1", "tag2"],
+#         "question": "Question 1",
+#         "tags": [
+#           {"id": "tag_id_1", "tag": "tag1"},
+#           {"id": "tag_id_2", "tag": "tag2"}
+#         ],
+#         "options": [
+#           {
+#             "option": "Option 1",
+#             "isCorrect": true,
+#             "optionImage": ""
+#           },
+#           {
+#             "option": "Option 2",
+#             "isCorrect": false,
+#             "optionImage": ""
+#           }
+#         ],
 #         "createdAt": "2023-06-15T10:30:00Z",
-#         "updatedAt": "2023-06-15T10:30:00Z"
+#         "questionImage": ""
 #       },
 #       {
 #         "id": "question_id_2",
-#         "title": "Question 2",
-#         "content": "Content 2",
-#         "tags": ["tag2", "tag3"],
+#         "question": "Question 2",
+#         "tags": [
+#           {"id": "tag_id_2", "tag": "tag2"},
+#           {"id": "tag_id_3", "tag": "tag3"}
+#         ],
+#         "options": [
+#           {
+#             "option": "Option 1",
+#             "isCorrect": false,
+#             "optionImage": ""
+#           },
+#           {
+#             "option": "Option 2",
+#             "isCorrect": true,
+#             "optionImage": ""
+#           }
+#         ],
 #         "createdAt": "2023-06-15T11:30:00Z",
-#         "updatedAt": "2023-06-15T11:30:00Z"
+#         "questionImage": ""
 #       }
 #     ],
-#     "page": 1,
-#     "size": 10,
-#     "total": 2
+#     "pagination": {
+#       "totalRecords": 2,
+#       "currentPage": 1,
+#       "totalPages": 1,
+#       "nextPage": null,
+#       "prevPage": null
+#     }
 #   }
 # }
 
 ### Get questions by tag (paginated)
-GET http://localhost:8080/v1/questions/tags?tag=kotlin&page=1&size=10
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODc0YjVlMGNiMjJiYzUxYjkzZTU2NWMiLCJpc3MiOiJodHRwczovL2p3dC1wcm92aWRlci1kb21haW4vIiwiYXVkIjoiand0LWF1ZGllbmNlIiwiZW1haWwiOiJiazk3MzU3MzI3NzdAZ21haWwuY29tIiwibmFtZSI6IkJoYXJhdCBLdW1hciIsImV4cCI6MTc1Mjc2MzcxN30._WKBdi5Z2E2HRRqZoo158agH81z2I8ZpvOktOwuxjuo
+GET {{baseUrl}}/v1/question/tag?tag=kotlin&page=1&size=10
+Authorization: Bearer {{bearerToken}}
 ### Response for questions by tag:
 # {
 #   "status": "Success",
 #   "message": "Questions retrieved successfully",
 #   "data": {
-#     "items": [
+#     "questions": [
 #       {
 #         "id": "question_id_1",
-#         "title": "What is Kotlin?",
-#         "content": "Can someone explain what Kotlin is and its main features?",
-#         "tags": ["kotlin", "programming"],
+#         "question": "What is Kotlin?",
+#         "tags": [
+#           {"id": "tag_id_1", "tag": "kotlin"},
+#           {"id": "tag_id_2", "tag": "programming"}
+#         ],
+#         "options": [
+#           {
+#             "option": "A programming language developed by JetBrains",
+#             "isCorrect": true,
+#             "optionImage": ""
+#           },
+#           {
+#             "option": "A database management system",
+#             "isCorrect": false,
+#             "optionImage": ""
+#           },
+#           {
+#             "option": "A web framework",
+#             "isCorrect": false,
+#             "optionImage": ""
+#           }
+#         ],
 #         "createdAt": "2023-06-15T10:30:00Z",
-#         "updatedAt": "2023-06-15T10:30:00Z"
+#         "questionImage": ""
 #       }
 #     ],
-#     "page": 1,
-#     "size": 10,
-#     "total": 1
+#     "pagination": {
+#       "totalRecords": 1,
+#       "currentPage": 1,
+#       "totalPages": 1,
+#       "nextPage": null,
+#       "prevPage": null
+#     }
 #   }
 # }
 
 ### Get random questions by tag
-GET http://localhost:8080/v1/questions/tags/random?tag=kotlin&size=5
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODc0YjVlMGNiMjJiYzUxYjkzZTU2NWMiLCJpc3MiOiJodHRwczovL2p3dC1wcm92aWRlci1kb21haW4vIiwiYXVkIjoiand0LWF1ZGllbmNlIiwiZW1haWwiOiJiazk3MzU3MzI3NzdAZ21haWwuY29tIiwibmFtZSI6IkJoYXJhdCBLdW1hciIsImV4cCI6MTc1Mjc2MzcxN30._WKBdi5Z2E2HRRqZoo158agH81z2I8ZpvOktOwuxjuo
-
+GET {{baseUrl}}/v1/question/tag/random?tag=Simple Problems on Probability&size=5
+Content-Type: application/json
+Authorization: Bearer {{bearerToken}}
 ### Response for random questions by tag:
 # {
 #   "status": "Success",
@@ -149,18 +303,38 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2ODc0YjVlM
 #   "data": [
 #     {
 #       "id": "question_id_1",
-#       "title": "What is Kotlin?",
-#       "content": "Can someone explain what Kotlin is and its main features?",
-#       "tags": ["kotlin", "programming"],
+#       "question": "What is Kotlin?",
+#       "tags": [
+#         {"id": "tag_id_1", "tag": "kotlin"},
+#         {"id": "tag_id_2", "tag": "programming"}
+#       ],
+#       "options": [
+#         {
+#           "option": "A programming language developed by JetBrains",
+#           "isCorrect": true,
+#           "optionImage": ""
+#         },
+#         {
+#           "option": "A database management system",
+#           "isCorrect": false,
+#           "optionImage": ""
+#         },
+#         {
+#           "option": "A web framework",
+#           "isCorrect": false,
+#           "optionImage": ""
+#         }
+#       ],
 #       "createdAt": "2023-06-15T10:30:00Z",
-#       "updatedAt": "2023-06-15T10:30:00Z"
+#       "questionImage": ""
 #     }
 #   ]
 # }
 
 ### Notes:
-# 1. Replace "YOUR_JWT_TOKEN" with a valid JWT token obtained from the authentication endpoint
+# 1. The Bearer token is stored in the environment variable {{bearerToken}}
 # 2. Replace "question_id" with an actual question ID from your database
 # 3. The page and size parameters are optional for paginated endpoints (defaults: page=1, size=10)
 # 4. For tag-based queries, ensure the tag exists in the system
 # 5. The Authorization header is required for all endpoints to identify the user
+# 6. To change the environment, use the environment selector in the HTTP client

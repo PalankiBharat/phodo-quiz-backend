@@ -1,5 +1,5 @@
 ### Refresh Token
-POST http://localhost:8080/v1/auth/refresh-token
+POST {{baseUrl}}/v1/auth/refresh-token
 Content-Type: application/json
 
 {
@@ -15,3 +15,8 @@ Content-Type: application/json
 #     "refreshToken": "new-refresh-token"
 #   }
 # }
+
+### Notes:
+# 1. The base URL is stored in the environment variable {{baseUrl}}
+# 2. Replace "your-refresh-token-here" with an actual refresh token
+# 3. To change the environment, use the environment selector in the HTTP client
